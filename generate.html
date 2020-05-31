@@ -1,0 +1,289 @@
+<html>
+<head>
+
+<style>
+			body {font-family:calibri;font-size:14px;}
+			.studex {background:#036;color:white;padding:4px;border-right:2px solid black;text-align:center;}
+			.tiden {border-left: 2px solid black;border-right: 2px solid black;border-top: 2px solid black;padding:4px;background:#036;color:#fff;border-bottom: 2px solid #fff;}
+			table {border-collapse: collapse; }
+			.namne {padding:4px;border-right:2px solid #000;}
+			.namns {padding:4px;}
+			.last {border-bottom:2px solid black;}
+			.datum {text-align:center;font-family : "Palatino Linotype", "Book Antiqua", Palatino, serif;font-weight:bold;font-size:18px;}
+			tr.foo:nth-child(even) {background: #DEE}
+			tr.foo:nth-child(odd) {background: #FFF}
+			.void {background:#fff;border-left:none;}
+			.lunch{height:5px;background:#FEF;border:2px solid black;}
+</style>
+	
+<script>
+var data=[];
+
+var daysx=2;
+var daysy=2;
+var itemcols=4;
+var itemheadings=["Student","Examinator","Opponent","Examinator Opponent"];
+
+var datedata=["M&aring;ndag 2020-06-01 (ZOOOOM)","Tisdag 2020-06-02 (ZOOOOM)","Onsdag 2020-06-03 (ZOOOOM)","Torsdag 2020-06-04 (ZOOOOM)"];
+	
+var publishdates=true;
+	
+var timeslots=["8:15-9:15","9:15-10:15","10:15-11:15","11:15-12:15","12:15-13:15","13:15-14:15","14:15-15:15","15:15-16:15","16:15-17:15"];
+	
+var lunch=4;
+	
+var slots=[
+		[
+				[],
+				["Adam D","Greger","Sven P","Greger"],
+				["Moshe V","Egon","Adam D","Greger"],
+				["Sven P","Greger","Moshe V","Egon"],			
+				[],
+				["Adam D","Greger","Sven P","Greger"],
+				["Moshe V","Egon","Adam D","Greger"],
+				["Sven P","Greger","Moshe V","Egon"],
+				["Sven P","Greger","Moshe V","Egon"],			
+		]
+];
+
+function highlightspan(curr)
+{
+		currname=curr.innerHTML;
+
+		var spanlist=document.getElementsByTagName("div");
+
+		for (i = 0; i < spanlist.length; i++) {
+				curitem=spanlist[i];
+				if(curitem.innerHTML==currname){
+						curitem.parentElement.style.background = "#fb8";
+				}
+		}
+}
+
+function dehighlightspan(curr)
+{
+		currname=curr.innerHTML;
+
+		var spanlist=document.getElementsByTagName("div");
+
+		for (i = 0; i < spanlist.length; i++) {
+				curitem=spanlist[i];
+				if(curitem.innerHTML==currname){
+						curitem.parentElement.style.background = "none";
+				}
+		}
+}
+
+function go()
+{
+		var str="FOO";
+
+		var leday=0;
+		for(var i=0;i<daysy;i++){
+				str+="<table>";
+
+				// Header containing date of session
+				str+"<tr>";
+				if(publishdates){
+						str+="<th class='void'></th>";
+				}
+				for(var j=0;j<daysx;j++){
+						str+="<th colspan='"+itemheadings.length+"' class='datum' style='color:red;'>";
+						str+=datedata[leday+j];
+						str+="</th>";
+				}
+				str+="</tr>";
+
+				// Header containing item headers
+				str+"<tr>";
+				if(publishdates){
+						str+="<th class='void'></th>";
+				}
+				for(var j=0;j<daysx;j++){
+					for(var k=0;k<itemheadings.length;k++){
+							str+="<td class='studex'>";
+							str+=itemheadings[k];
+							str+="</td>";
+					}
+				}
+				str+="</tr>";
+			
+				for(var j=0;j<timeslots.length;j++){
+						if(j!=lunch){
+								str+="<tr class='foo'>";
+
+								if(publishdates){
+										str+="<td class='tiden'>";
+										str+=timeslots[j];
+										str+="</td>";
+								}					
+
+								for(var k=0;k<daysx;k++){
+									for(var l=0;l<itemheadings.length;l++){
+											var data=slots[0][j][l];
+											if(typeof data=="undefined"){
+													str+="<td>";
+													str+="&nbsp;";
+													str+="</td>";
+											}else{
+													str+="<td class='oomph'>";
+													str+="<div onmouseover='highlightspan(this)' onmouseout='dehighlightspan(this)' class='namns' >";
+													str+=data;
+													str+="</div>"
+													str+="</td>";
+											}
+											str+="</td>";
+									}
+								}					
+
+								str+="</tr>";
+						}else{
+								str+="<tr style='line-height: 7px;'>";
+						
+								if(publishdates){							
+										str+="<td class='lunch'></td>";
+								}
+
+								for(var k=0;k<daysx;k++){
+										str+="<td style='border-left:2px solid black;' class='lunch' colspan='"+itemheadings.length+"' style=''>";
+										str+="</td>";								
+								}
+									
+								str+="</tr>";
+						
+						}
+				}
+
+				leday+=2;
+
+				str+="</table>";
+		}
+		
+		document.getElementById('tablecontent').innerHTML=str;
+}
+
+</script>
+</head>
+<body onload="go();">
+
+<div id='tablecontent'>
+
+</div>
+</body>
+
+<!--
+<table>
+	<tbody>
+		<tr class="foo">
+			
+      
+      <th colspan="4" class="datum" style="color:red;">Tisdag 2020-06-02 (ZOOOOM)</th>
+	</tr>
+							
+		<tr class="foo">
+			<td class="void"> </td>
+			<td class="studex">Student</td>
+			<td class="studex">Examinator</td>
+			<td class="studex">Opponent</td>
+			<td class="studex">Examinator Opponent</td>
+			<td class="studex">Student</td>
+			<td class="studex">Examinator</td>
+			<td class="studex">Opponent</td>
+			<td class="studex">Examinator Opponent</td>
+		</tr>
+		<tr class="foo">
+			<td class="tiden">08:15-09:15</td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>		
+		</tr>
+    <tr class="foo">
+			<td class="tiden">09:15-10:15</td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Jacob</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Max</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+		</tr>
+		<tr class="foo">
+			<td class="tiden">10:15-11:15</td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Max</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Carl</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+		</tr>
+		<tr class="foo">
+			<td class="tiden">11:15-12:15</td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Carl</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Jacob</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+		</tr>
+		<tr style="line-height: 7px;">
+			<td class="lunch"> </td>
+			<td style="border-left:2px solid black;" class="lunch" colspan="4"></td>
+			<td class="lunch" colspan="4" style=""></td>
+		</tr>
+		<tr class="foo">
+			<td class="tiden">13:15-14:15</td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Annica</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">John</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Adam Carl</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Mikael B</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Hiwa</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>			
+    </tr>
+		<tr class="foo">
+			<td class="tiden">14:15-15:15</td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Julia</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Oscar</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Robin E</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Joakim</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>
+		</tr>
+		<tr class="foo">
+			<td class="tiden">15:15-16:15</td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">John</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Julia</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Hiwa</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Robin E</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+		</tr>
+		<tr class="foo">
+			<td class="tiden">16:15-17:15</td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Oscar</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Annica</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Henrik G</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Joakim</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Yacine A</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Adam Carl</div></td>
+			<td style=""><div onmouseover="highlightspan(this)" onmouseout="dehighlightspan(this)" class="namns" contenteditable="true">Mikael B</div></td>		
+		</tr>
+	</tbody>
+</table>
+-->
